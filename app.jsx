@@ -11,9 +11,7 @@ import {
   Download, 
   Grid, 
   List, 
-  Sparkles, 
   X,
-  FileText,
   ArrowLeft,
   CheckSquare,
   Square,
@@ -21,36 +19,40 @@ import {
   Layers
 } from 'lucide-react';
 
-// Pre-seeded sample data
-const SAMPLE_CSV_TRANSFORMATION = `Category,Item Description,Brand / Platform,Specific Size / Spec,Price (INR),Direct Purchase or Search Link
-Prep,Salicylic Acid 2% Cleanser,Minimalist,100ml,300,https://www.amazon.in/s?k=Minimalist+Salicylic+Acid+2%25+Cleanser
-Prep,Pure Coconut Oil / Baby Oil,Parachute / Johnson's,Shave Base,100,https://www.amazon.in/s?k=Parachute+Coconut+Oil
-Prep,Body Milk (Deep Moisture Glaze),Nivea,Very Dry Skin,250,https://www.amazon.in/s?k=Nivea+Body+Milk+Very+Dry+Skin
-Makeup,Pro Concealer Palette (6-Color Wheel),Insight Cosmetics,Corrector / Contour,240,https://www.amazon.in/s?k=Insight+Cosmetics+Pro+Concealer+Palette
-Makeup,Fit Me Matte + Poreless Foundation,Maybelline New York,Liquid Base,550,https://www.amazon.in/s?k=Maybelline+Fit+Me+Matte+Poreless+Foundation
-Makeup,Blend Master Sponge,Insight Cosmetics,High-Density,150,https://www.amazon.in/s?k=Insight+Cosmetics+Blend+Master+Sponge
-Makeup,Liquid Eyeliner + Mascara Pack,Swiss Beauty,Jet Black / Waterproof,350,https://www.amazon.in/s?k=Swiss+Beauty+Liquid+Eyeliner+Mascara
-Makeup,Bold Matte Lip Liner,Swiss Beauty,Center Overlining,70,https://www.amazon.in/s?k=Swiss+Beauty+Bold+Matte+Lip+Liner
-Makeup,SuperStay Matte Ink Liquid Lipstick,Maybelline New York,Locked / Transfer-proof,650,https://www.amazon.in/s?k=Maybelline+SuperStay+Matte+Ink
-Makeup,Flawless Finishing Loose Powder,Blue Heaven,Translucent Baking,180,https://www.amazon.in/s?k=Blue+Heaven+Flawless+Finishing+Loose+Powder
-Wardrobe,Seamless Microfiber Bikini Panty,Clovia / Zivame,Size Medium (M),250,https://www.clovia.com/search/?q=seamless+microfiber+bikini+panty
-Wardrobe,Seamless Padded Bralette,Clovia / Zivame,Size 34B (Sister Size),600,https://www.clovia.com/search/?q=seamless+padded+bralette
-Hardware,Silicone Teardrop Breast Forms,Generic (Amazon India),400g / pair (200g each),1200,https://www.amazon.in/s?k=Silicone+Teardrop+Breast+Forms+400g
-Hardware,Foam Padded Hip & Butt Briefs,Generic (Amazon India),Base Curve Builder,900,https://www.amazon.in/s?k=Foam+Padded+Hip+Butt+Briefs
-Wardrobe,Satin Shirt Dress with Front Drape,MABISH by Sonal Jain,"Size Large (L), Black",1200,https://www.myntra.com/mabish-by-sonal-jain-black-solid-dress
-Hardware,Pointed-Toe Block Heels / Pumps,Generic (Amazon India),Size UK 10 / UK 11,3100,https://www.amazon.in/s?k=Womens+Pointed+Toe+Block+Heels+UK+10+UK+11
-Jewelry,Anti-Tarnish Stainless Steel Anklet,Yellow Chimes,Right Leg Anchor,350,https://www.amazon.in/s?k=Yellow+Chimes+Anti+Tarnish+Stainless+Steel+Anklet
-Jewelry,Minimalist Single-Pendant Chain,Yellow Chimes / Salty,V-Neck Framing,350,https://www.amazon.in/s?k=Yellow+Chimes+Minimalist+Single+Pendant+Chain
-Jewelry,Non-Pierced Clip-On Earring Pack,Indicare / Generic,Huggie Hoop / Drop,200,https://www.amazon.in/s?k=Anti+Tarnish+Stainless+Steel+Clip+On+Earrings
-Jewelry,Slender Chain Bracelet,Yellow Chimes,Left Wrist Anchor,250,https://www.amazon.in/s?k=Yellow+Chimes+Stainless+Steel+Chain+Bracelet`;
+// Pre-seeded sample data formatted as an array to prevent backtick copy-paste corruption on mobile
+const SAMPLE_CSV_TRANSFORMATION = [
+  "Category,Item Description,Brand / Platform,Specific Size / Spec,Price (INR),Direct Purchase or Search Link",
+  "Prep,Salicylic Acid 2% Cleanser,Minimalist,100ml,300,https://www.amazon.in/s?k=Minimalist+Salicylic+Acid+2%25+Cleanser",
+  "Prep,Pure Coconut Oil / Baby Oil,Parachute / Johnson's,Shave Base,100,https://www.amazon.in/s?k=Parachute+Coconut+Oil",
+  "Prep,Body Milk (Deep Moisture Glaze),Nivea,Very Dry Skin,250,https://www.amazon.in/s?k=Nivea+Body+Milk+Very+Dry+Skin",
+  "Makeup,Pro Concealer Palette (6-Color Wheel),Insight Cosmetics,Corrector / Contour,240,https://www.amazon.in/s?k=Insight+Cosmetics+Pro+Concealer+Palette",
+  "Makeup,Fit Me Matte + Poreless Foundation,Maybelline New York,Liquid Base,550,https://www.amazon.in/s?k=Maybelline+Fit+Me+Matte+Poreless+Foundation",
+  "Makeup,Blend Master Sponge,Insight Cosmetics,High-Density,150,https://www.amazon.in/s?k=Insight+Cosmetics+Blend+Master+Sponge",
+  "Makeup,Liquid Eyeliner + Mascara Pack,Swiss Beauty,Jet Black / Waterproof,350,https://www.amazon.in/s?k=Swiss+Beauty+Liquid+Eyeliner+Mascara",
+  "Makeup,Bold Matte Lip Liner,Swiss Beauty,Center Overlining,70,https://www.amazon.in/s?k=Swiss+Beauty+Bold+Matte+Lip+Liner",
+  "Makeup,SuperStay Matte Ink Liquid Lipstick,Maybelline New York,Locked / Transfer-proof,650,https://www.amazon.in/s?k=Maybelline+SuperStay+Matte+Ink",
+  "Makeup,Flawless Finishing Loose Powder,Blue Heaven,Translucent Baking,180,https://www.amazon.in/s?k=Blue+Heaven+Flawless+Finishing+Loose+Powder",
+  "Wardrobe,Seamless Microfiber Bikini Panty,Clovia / Zivame,Size Medium (M),250,https://www.clovia.com/search/?q=seamless+microfiber+bikini+panty",
+  "Wardrobe,Seamless Padded Bralette,Clovia / Zivame,Size 34B (Sister Size),600,https://www.clovia.com/search/?q=seamless+padded+bralette",
+  "Hardware,Silicone Teardrop Breast Forms,Generic (Amazon India),400g / pair (200g each),1200,https://www.amazon.in/s?k=Silicone+Teardrop+Breast+Forms+400g",
+  "Hardware,Foam Padded Hip & Butt Briefs,Generic (Amazon India),Base Curve Builder,900,https://www.amazon.in/s?k=Foam+Padded+Hip+Butt+Briefs",
+  "Wardrobe,Satin Shirt Dress with Front Drape,MABISH by Sonal Jain,\"Size Large (L), Black\",1200,https://www.myntra.com/mabish-by-sonal-jain-black-solid-dress",
+  "Hardware,Pointed-Toe Block Heels / Pumps,Generic (Amazon India),Size UK 10 / UK 11,3100,https://www.amazon.in/s?k=Womens+Pointed+Toe+Block+Heels+UK+10+UK+11",
+  "Jewelry,Anti-Tarnish Stainless Steel Anklet,Yellow Chimes,Right Leg Anchor,350,https://www.amazon.in/s?k=Yellow+Chimes+Anti+Tarnish+Stainless+Steel+Anklet",
+  "Jewelry,Minimalist Single-Pendant Chain,Yellow Chimes / Salty,V-Neck Framing,350,https://www.amazon.in/s?k=Yellow+Chimes+Minimalist+Single+Pendant+Chain",
+  "Jewelry,Non-Pierced Clip-On Earring Pack,Indicare / Generic,Huggie Hoop / Drop,200,https://www.amazon.in/s?k=Anti+Tarnish+Stainless+Steel+Clip+On+Earrings",
+  "Jewelry,Slender Chain Bracelet,Yellow Chimes,Left Wrist Anchor,250,https://www.amazon.in/s?k=Yellow+Chimes+Stainless+Steel+Chain+Bracelet"
+].join("\n");
 
-const SAMPLE_CSV_AMENITIES = `Category,Item Description,Brand / Platform,Specific Size / Spec,Price (INR),Direct Purchase or Search Link
-Kitchen,Ceramic Pastel Coffee Mug,Doodle Home,Set of 2,600,https://www.amazon.in/s?k=Ceramic+Pastel+Coffee+Mug
-Kitchen,Non-Stick Pastel Cookware Set,Wonderchef,3-Piece Pink,2400,https://www.amazon.in/s?k=Wonderchef+Pink+Cookware+Set
-Living Room,Tufted Pastel Throw Pillow,Swayam,45x45cm Lavender,800,https://www.amazon.in/s?k=Tufted+Pastel+Throw+Pillow
-Living Room,Abstract Pastel Wall Art,Art Street,Set of 3 Minimalist,1200,https://www.amazon.in/s?k=Abstract+Pastel+Wall+Art+Set+3
-Bedroom,100% Cotton Pastel Bedding Set,Portico New York,Double Bed Mint,1800,https://www.amazon.in/s?k=Mint+Pastel+Cotton+Bedding+Set
-Bathroom,Plush Pastel Cotton Towels,Solimo,Pack of 4 Peach,950,https://www.amazon.in/s?k=Plush+Pastel+Cotton+Towels+Peach`;
+const SAMPLE_CSV_AMENITIES = [
+  "Category,Item Description,Brand / Platform,Specific Size / Spec,Price (INR),Direct Purchase or Search Link",
+  "Kitchen,Ceramic Pastel Coffee Mug,Doodle Home,Set of 2,600,https://www.amazon.in/s?k=Ceramic+Pastel+Coffee+Mug",
+  "Kitchen,Non-Stick Pastel Cookware Set,Wonderchef,3-Piece Pink,2400,https://www.amazon.in/s?k=Wonderchef+Pink+Cookware+Set",
+  "Living Room,Tufted Pastel Throw Pillow,Swayam,45x45cm Lavender,800,https://www.amazon.in/s?k=Tufted+Pastel+Throw+Pillow",
+  "Living Room,Abstract Pastel Wall Art,Art Street,Set of 3 Minimalist,1200,https://www.amazon.in/s?k=Abstract+Pastel+Wall+Art+Set+3",
+  "Bedroom,100% Cotton Pastel Bedding Set,Portico New York,Double Bed Mint,1800,https://www.amazon.in/s?k=Mint+Pastel+Cotton+Bedding+Set",
+  "Bathroom,Plush Pastel Cotton Towels,Solimo,Pack of 4 Peach,950,https://www.amazon.in/s?k=Plush+Pastel+Cotton+Towels+Peach"
+].join("\n");
 
 const PASTEL_PALETTES = [
   { bg: 'bg-[#FFE5EC]', border: 'border-[#FFA6C9]', text: 'text-[#8A2544]', bgHover: 'hover:bg-[#FFD1DC]' }, 
@@ -98,23 +100,18 @@ export default function App() {
   const [lists, setLists] = useState([]);
   const [activeListId, setActiveListId] = useState(null); 
   const [showCreateModal, setShowCreateModal] = useState(false);
-  
-  // Custom non-blocking modal confirmation state
   const [deleteConfirmation, setDeleteConfirmation] = useState(null); 
   
-  // Create List Form State
   const [newListTitle, setNewListTitle] = useState('');
   const [newListDesc, setNewListDesc] = useState('');
   const [newListEmoji, setNewListEmoji] = useState('✨');
   const [newListCsvText, setNewListCsvText] = useState('');
 
-  // Active Workspace Navigation & Layout States
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('default');
   const [viewMode, setViewMode] = useState('grid');
   
-  // Manual Item Form State
   const [newItem, setNewItem] = useState({
     category: '',
     name: '',
@@ -127,7 +124,6 @@ export default function App() {
   const [editingItem, setEditingItem] = useState(null);
   const [uiNotification, setUiNotification] = useState(null);
 
-  // Dynamic Google Font Injection (Instrument Serif & Plus Jakarta Sans)
   useEffect(() => {
     const link = document.createElement('link');
     link.href = 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Instrument+Serif:ital,wght@0,400;0,900;1,400;1,900&display=swap';
@@ -135,16 +131,11 @@ export default function App() {
     document.head.appendChild(link);
 
     const style = document.createElement('style');
-    style.innerHTML = `
-      .font-doodle-serif { font-family: 'Instrument Serif', Georgia, serif; }
-      .font-doodle-sans { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
-    `;
+    style.innerHTML = ".font-doodle-serif { font-family: 'Instrument Serif', Georgia, serif; } .font-doodle-sans { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }";
     document.head.appendChild(style);
   }, []);
 
-  // Hydrate lists and active navigation states directly from Storage
   useEffect(() => {
-    // 1. Restore core lists data
     const savedLists = localStorage.getItem('pastel_doodle_shopping_hub');
     if (savedLists) {
       try {
@@ -175,7 +166,6 @@ export default function App() {
       localStorage.setItem('pastel_doodle_shopping_hub', JSON.stringify(defaultLists));
     }
 
-    // 2. Restore active workspace layout parameters
     const savedActiveId = localStorage.getItem('pastel_doodle_active_list_id');
     if (savedActiveId) setActiveListId(JSON.parse(savedActiveId));
 
@@ -192,7 +182,6 @@ export default function App() {
     if (savedSearch) setSearchQuery(JSON.parse(savedSearch));
   }, []);
 
-  // Stateful Persistence Wrappers
   const saveLists = (updated) => {
     setLists(updated);
     localStorage.setItem('pastel_doodle_shopping_hub', JSON.stringify(updated));
@@ -228,7 +217,6 @@ export default function App() {
     setTimeout(() => setUiNotification(null), 3000);
   };
 
-  // Convert raw CSV to robust item nodes
   function parseCSVToItemsArray(rawText) {
     const rows = parseCSV(rawText);
     if (rows.length < 2) return [];
@@ -261,7 +249,7 @@ export default function App() {
 
       if (name) {
         itemsList.push({
-          id: `item-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+          id: 'item-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
           category: category || 'General',
           name,
           brand: brand || 'Generic',
@@ -275,7 +263,6 @@ export default function App() {
     return itemsList;
   }
 
-  // Create new list notebook
   const handleCreateNewList = (e) => {
     e.preventDefault();
     if (!newListTitle.trim()) {
@@ -289,7 +276,7 @@ export default function App() {
     }
 
     const created = {
-      id: `list-${Date.now()}`,
+      id: 'list-' + Date.now(),
       title: newListTitle.trim(),
       description: newListDesc.trim() || 'A custom list of curated elements.',
       emoji: newListEmoji,
@@ -302,10 +289,9 @@ export default function App() {
     setNewListEmoji('✨');
     setNewListCsvText('');
     setShowCreateModal(false);
-    triggerNotification(`Notebook "${created.title}" added!`);
+    triggerNotification('Notebook "' + created.title + '" added!');
   };
 
-  // Master Notebook Deletion (Delegated to Custom Modal)
   const handleDeleteListNotebookTrigger = (listId, listTitle, e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -316,7 +302,6 @@ export default function App() {
     });
   };
 
-  // Item Deletion Trigger (Delegated to Custom Modal)
   const handleDeleteItemFromActiveWorkspaceTrigger = (itemId, itemName, e) => {
     if (e) e.stopPropagation();
     setDeleteConfirmation({
@@ -326,7 +311,6 @@ export default function App() {
     });
   };
 
-  // Category Deletion Trigger (Delegated to Custom Modal)
   const handleDeleteCategoryTrigger = (categoryName, e) => {
     if (e) e.stopPropagation();
     setDeleteConfirmation({
@@ -336,7 +320,6 @@ export default function App() {
     });
   };
 
-  // Executes the real write once approved inside the secure custom modal
   const handleExecuteDeletion = () => {
     if (!deleteConfirmation) return;
     const { type, id, title } = deleteConfirmation;
@@ -344,7 +327,7 @@ export default function App() {
     if (type === 'notebook') {
       const updated = lists.filter(l => l.id !== id);
       saveLists(updated);
-      triggerNotification(`Deleted "${title}"`);
+      triggerNotification('Deleted "' + title + '"');
       if (activeListId === id) {
         persistActiveListId(null);
       }
@@ -356,7 +339,7 @@ export default function App() {
         return l;
       });
       saveLists(updatedLists);
-      triggerNotification(`Removed "${title}"`);
+      triggerNotification('Removed "' + title + '"');
     } else if (type === 'category') {
       if (!activeList) return;
       const updatedItems = activeList.items.filter(item => item.category !== id);
@@ -366,13 +349,12 @@ export default function App() {
       });
       saveLists(updatedLists);
       persistActiveCategory('All');
-      triggerNotification(`Deleted category "${title}" and all nested items.`);
+      triggerNotification('Deleted category "' + title + '" and all nested items.');
     }
 
     setDeleteConfirmation(null);
   };
 
-  // Import raw CSV file directly
   const handleCSVUploadFromFiles = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -384,15 +366,15 @@ export default function App() {
       const items = parseCSVToItemsArray(text);
       
       const created = {
-        id: `list-${Date.now()}`,
+        id: 'list-' + Date.now(),
         title: fileTitle,
-        description: `Imported directly from file: ${file.name}`,
+        description: 'Imported directly from file: ' + file.name,
         emoji: '📂',
         items: items
       };
 
       saveLists([created, ...lists]);
-      triggerNotification(`Imported "${fileTitle}"!`);
+      triggerNotification('Imported "' + fileTitle + '"!');
     };
     reader.readAsText(file);
   };
@@ -401,7 +383,6 @@ export default function App() {
     return lists.find(l => l.id === activeListId) || null;
   }, [lists, activeListId]);
 
-  // Handle auto-fallback to 'All' category if the selected category no longer exists
   useEffect(() => {
     if (activeList && activeCategory !== 'All') {
       const exists = activeList.items.some(item => item.category === activeCategory);
@@ -411,7 +392,6 @@ export default function App() {
     }
   }, [lists, activeList, activeCategory]);
 
-  // Acquire / Check off item
   const handleItemCompletionToggle = (itemId, e) => {
     if (e) e.stopPropagation();
     if (!activeList) return;
@@ -428,7 +408,6 @@ export default function App() {
     saveLists(updatedLists);
   };
 
-  // Manual Addition inside current active list
   const handleAddItemToActiveWorkspace = (e) => {
     e.preventDefault();
     if (!activeList) return;
@@ -439,7 +418,7 @@ export default function App() {
 
     const priceVal = parseFloat(newItem.price) || 0;
     const itemAdded = {
-      id: `item-${Date.now()}`,
+      id: 'item-' + Date.now(),
       category: newItem.category.trim(),
       name: newItem.name.trim(),
       brand: newItem.brand.trim() || 'Generic',
@@ -460,7 +439,6 @@ export default function App() {
     triggerNotification("Added item!");
   };
 
-  // Edit / Mutate single item config
   const handleUpdateItemDetails = (e) => {
     e.preventDefault();
     if (!activeList || !editingItem) return;
@@ -487,12 +465,12 @@ export default function App() {
 
     const headers = ["Category", "Item Description", "Brand / Platform", "Specific Size / Spec", "Price (INR)", "Direct Purchase or Search Link"];
     const rows = activeList.items.map(item => [
-      `"${item.category.replace(/"/g, '""')}"`,
-      `"${item.name.replace(/"/g, '""')}"`,
-      `"${item.brand.replace(/"/g, '""')}"`,
-      `"${item.spec.replace(/"/g, '""')}"`,
+      '"' + item.category.replace(/"/g, '""') + '"',
+      '"' + item.name.replace(/"/g, '""') + '"',
+      '"' + item.brand.replace(/"/g, '""') + '"',
+      '"' + item.spec.replace(/"/g, '""') + '"',
       item.price,
-      `"${item.link.replace(/"/g, '""')}"`
+      '"' + item.link.replace(/"/g, '""') + '"'
     ]);
 
     const csvContent = "data:text/csv;charset=utf-8," 
@@ -501,7 +479,7 @@ export default function App() {
     const encodedUri = encodeURI(csvContent);
     const downloadLink = document.createElement("a");
     downloadLink.setAttribute("href", encodedUri);
-    downloadLink.setAttribute("download", `${activeList.title.toLowerCase().replace(/\s+/g, '_')}_list.csv`);
+    downloadLink.setAttribute("download", activeList.title.toLowerCase().replace(/\s+/g, '_') + '_list.csv');
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
@@ -513,4 +491,23 @@ export default function App() {
     return ['All', ...Array.from(cats)];
   }, [activeList]);
 
-  
+  const activeListStats = useMemo(() => {
+    if (!activeList) return null;
+    const totalCount = activeList.items.length;
+    const completedCount = activeList.items.filter(i => i.completed).length;
+    const totalBudget = activeList.items.reduce((sum, item) => sum + item.price, 0);
+    const spentAmount = activeList.items.filter(i => i.completed).reduce((sum, item) => sum + item.price, 0);
+    const remainingAmount = totalBudget - spentAmount;
+
+    return {
+      totalCount,
+      completedCount,
+      percentComplete: totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0,
+      totalBudget,
+      spentAmount,
+      remainingAmount
+    };
+  }, [activeList]);
+
+  const globalMetrics = useMemo(() => {
+   

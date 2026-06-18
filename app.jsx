@@ -510,4 +510,7 @@ export default function App() {
   }, [activeList]);
 
   const globalMetrics = useMemo(() => {
-   
+   if (!activeList) return [];
+    const cats = new Set(activeList.items.map(i => i.category));
+    return ['All', ...Array.from(cats)];
+  }, [activeList]);
